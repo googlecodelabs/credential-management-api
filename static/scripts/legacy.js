@@ -109,7 +109,7 @@ setTimeout(function() {
   var url = new URL(location.href);
   var params = new URLSearchParams(url.search.slice(1));
   if (params.get('quote')) {
-    app.fire('show-text', {
+    app.fire('show-toast', {
       text: params.get('quote')
     });
   }

@@ -9,6 +9,7 @@
 - Google App Engine
 - Python 2.7
 - pip
+- virtualenv
 - Node.js
 - NPM
 - Bower
@@ -24,7 +25,7 @@
 ### Step 2. Configure Facebook Login
 - Set up a new project at [Facebook Developers](https://developers.facebook.com/)
 - Set "Site URL" `http://localhost:8080`
-- Copy and paste the App ID at line 18 of `static/scripts/app.js`.
+- Copy and paste the App ID at line 18 of `static/scripts/federation.js`.
 
 ![](static/images/howto/fb_config.png)
 
@@ -35,6 +36,9 @@
 # Clone submodules
 $ git submodule init
 $ git submodule update
+# Create python virtualenv
+$ virtualenv env
+$ source env/bin/activate
 # This command will install dependencies
 $ npm install
 ```
@@ -42,5 +46,5 @@ $ npm install
 ### Step 4. Run the app
 ```sh
 # Launch App Engine at root dir of this project with following command
-$ dev_appserver.py .
+$ dev_appserver.py . --host=0.0.0.0 --port=8080 --admin_port=8081
 ```

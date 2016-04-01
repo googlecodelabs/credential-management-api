@@ -8,19 +8,14 @@
                 chrome://flags/#enable-credential-manager-api .
                 </p>
               </template>
-              <paper-card heading="Sign-up now!">
-                <form id="regForm" method="post" action="/register">
+              <paper-card heading="Please sign-in">
+                <form id="form" method="post" action="/auth/password">
                   <input id="csrf_token" type="hidden" name="csrf_token" value="{{csrf_token}}" />
-                  <paper-input id="name" name="name" label="Your name" autocomplete="name">
-                  </paper-input>
-                  <paper-input id="email" name="email" label="Your email address" autocomplete="username">
-                  </paper-input>
-                  <paper-input id="password" type="password" name="password" label="Password" autocomplete="new-password">
-                  </paper-input>
-                  <div class="layout horizontal around-justified">
-                    <paper-button raised>
-                      <input type="submit" />
-                    </paper-button>
+                  <paper-input id="lemail" name="email" label="email" autocomplete="username"></paper-input>
+                  <paper-input id="lpassword" type="password" name="password" label="password" autocomplete="current-password"></paper-input>
+                  <div class="buttons">
+                    <paper-button dialog-dismiss raised>Canel</paper-button>
+                    <paper-button raised><input type="submit" /></paper-button>
                   </div>
                 </form>
                 <div class="layout horizontal center-justified">

@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block body %}
+            <div class="layout center vertical">
+              <template is="dom-if" if="[[!cmaEnabled]]">
+                <p>Credential Management API is not available on your browser.
+                Try <a href="https://www.google.com/chrome/">Google Chrome 49 or
+                later</a> and enable the flag at
+                chrome://flags/#enable-credential-manager-api .
+                </p>
+              </template>
+              <div class="profile layout center vertical">
+                <h2>Welcome! <span>{{name}}</span></h2>
+                <div class="flex">
+                  <img src="{{imageUrl}}"/>
+                </div>
+              </div>
+            </div>{% endblock %}

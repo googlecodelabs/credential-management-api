@@ -23,7 +23,7 @@ import binascii
 import json
 import urllib
 from bcrypt import bcrypt
-from flask import Flask, request, make_response, render_template, session
+from flask import Flask, request, make_response, render_template, session, redirect, url_for, session
 from oauth2client import client
 
 from google.appengine.ext import ndb
@@ -83,7 +83,7 @@ def csrf_protect():
         # Compare the POST'ed CSRF token with the one in the session
         if not csrf_token or csrf_token != request.form.get('csrf_token'):
             # Return 403 if empty or they are different
-            return make_response('', 403)
+            return make_response('Forbidden', 403)
 
 
 @app.route('/')
@@ -91,7 +91,58 @@ def index():
     # Issue a CSRF token if not included in the session
     if 'csrf_token' not in session:
         session['csrf_token'] = binascii.hexlify(os.urandom(24))
-    return render_template('index.html', client_id=CLIENT_ID,
+
+    # Obtain id from session
+    id = session.get('id', None)
+
+    # If session includes `id`, the user is already signed in
+    if id is not None:
+        store = CredentialStore.get_by_id(id)
+        if store is not None:
+            return redirect(url_for('main'))
+
+    return render_template('index.html',
+                           path=request.path,
+                           client_id=CLIENT_ID,
+                           csrf_token=session['csrf_token'])
+
+
+@app.route('/main')
+def main():
+    # TODO: Is this required?
+    if 'csrf_token' not in session:
+        session['csrf_token'] = binascii.hexlify(os.urandom(24))
+
+    # Obtain id from session
+    id = session.get('id', None)
+
+    # If session doesn't include `id`, the user is not signed in
+    if id is None:
+        return redirect(url_for('signin'))
+
+    # Obtain Datastore entry by email address
+    store = CredentialStore.get_by_id(id)
+
+    # If the store doesn't exist, fail.
+    if store is None:
+        return redirect(url_for('signin'))
+
+    profile = store.profile
+
+    return render_template('main.html',
+                           path=request.path,
+                           name=profile['name'],
+                           imageUrl=profile['imageUrl'],
+                           csrf_token=session['csrf_token'])
+
+@app.route('/signin')
+def signin():
+    if 'csrf_token' not in session:
+        session['csrf_token'] = binascii.hexlify(os.urandom(24))
+
+    return render_template('signin.html',
+                           path=request.path,
+                           client_id=CLIENT_ID,
                            csrf_token=session['csrf_token'])
 
 
@@ -107,23 +158,25 @@ def pwauth():
 
     # If the store doesn't exist, fail.
     if store is None:
-        return make_response('Authentication failed.', 401)
+        print 'store not found'
+        return redirect(url_for('signin', quote='You are not registered'))
 
     profile = store.profile
 
     # If the profile doesn't exist, fail.
     if profile is None:
-        return make_response('Authentication failed.', 401)
+        print 'profile not found'
+        return redirect(url_for('signin', quote='Something went wrong'))
 
     # If the password doesn't match, fail.
     if CredentialStore.verify(password, profile['password']) is False:
         return make_response('Authentication failed.', 401)
 
-    # Get rid of password from profile
-    profile.pop('password')
+    session['id'] = email
 
     # Not making a session for demo purpose/simplicity
-    return make_response(json.dumps(profile), 200)
+    return redirect(url_for('main',
+                            quote='You are signed in with id/password'))
 
 
 @app.route('/auth/google', methods=['POST'])
@@ -139,21 +192,30 @@ def gauth():
                              'https://accounts.google.com']:
         return make_response('Wrong Issuer.', 401)
 
+    id = idinfo['sub']
+
     # For now, we'll always store profile data after successfully
     # verifying the token and consider the user authenticated.
-    store = CredentialStore(id=idinfo['sub'], profile=idinfo)
-    store.put()
+    store = CredentialStore.get_by_id(id)
+
+    if store is None:
+        store = CredentialStore(id=id)
 
     # Construct a profile object
-    profile = {
-        'id':        idinfo.get('sub', None),
+    store.profile = {
+        'id':        id,
         'imageUrl':  idinfo.get('picture', None),
         'name':      idinfo.get('name', None),
         'email':     idinfo.get('email', None)
     }
+    print store.profile
+    store.put()
+
+    session['id'] = id
 
     # Not making a session for demo purpose/simplicity
-    return make_response(json.dumps(profile), 200)
+    return redirect(url_for('main',
+                            quote='You are signed in with Google'))
 
 
 @app.route('/auth/facebook', methods=['POST'])
@@ -183,17 +245,21 @@ def fblogin():
                        headers={'Authorization': 'OAuth '+access_token})
     idinfo = json.loads(r.content)
 
-    # Save the Facebook profile
-    store = CredentialStore(id=idinfo['id'], profile=idinfo)
-    store.put()
-
     # Obtain the Facebook user's image
     profile = idinfo
-    profile['imageUrl'] = 'https://graph.facebook.com/' + profile['id'] +\
+    id = profile['id']
+    profile['imageUrl'] = 'https://graph.facebook.com/' + id +\
         '/picture?width=96&height=96'
 
+    # Save the Facebook profile
+    store = CredentialStore(id=id, profile=profile)
+    store.put()
+
+    session['id'] = id
+
     # Not making a session for demo purpose/simplicity
-    return make_response(json.dumps(profile), 200)
+    return redirect(url_for('main',
+                            quote='You are signed in with Facebook'))
 
 
 @app.route('/register', methods=['POST'])
@@ -212,7 +278,7 @@ def register():
             'email':    request.form.get('email', ''),
             'name':     request.form.get('name', ''),
             'password': password,
-            'imageUrl': 'images/default_img.png'
+            'imageUrl': '/images/default_img.png'
         }
     else:
         return make_response('Bad request', 400)
@@ -221,36 +287,43 @@ def register():
     store = CredentialStore(id=profile['id'], profile=profile)
     store.put()
 
-    # Get rid of password from profile
-    profile.pop('password')
+    session['id'] = profile['id']
 
     # Not making a session for demo purpose/simplicity
-    return make_response(json.dumps(profile), 200)
+    return redirect(url_for('main',
+                            quote='Thanks for registering!'))
 
 
 @app.route('/unregister', methods=['POST'])
 def unregister():
-    if 'id' not in request.form:
-        make_response('User id not specified', 400)
+    # Obtain id from session
+    id = session.get('id', None)
 
-    id = request.form.get('id', '')
-    store = CredentialStore.get_by_id(str(id))
-
+    # If session includes `id`, the user is already signed in
+    if id is None:
+        return redirect(url_for('main'))
+    store = CredentialStore.get_by_id(id)
     if store is None:
-        make_response('User not registered', 400)
+        return redirect(url_for('main'))
 
     profile = store.profile
 
     if profile is None:
-        return make_response('Failed', 400)
+        return redirect(url_for('main'))
 
     # Remove the user account
-    CredentialStore.remove(str(id))
+    CredentialStore.remove(id)
+
     # Not terminating a session for demo purpose/simplicity
-    return make_response('Success', 200)
+    return redirect(url_for('index',
+                            quote='You are unregistered'))
 
 
 @app.route('/signout', methods=['POST'])
 def signout():
+    # Terminate sessions
+    session.pop('id', None)
+
     # Not terminating a session for demo purpose/simplicity
-    return make_response(json.dumps({}), 200)
+    return redirect(url_for('index',
+                            quote='You are signed out'))

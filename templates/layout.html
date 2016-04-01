@@ -49,6 +49,15 @@
       -moz-clip-path: circle(50% at 50% 50%);
       -o-clip-path: circle(50% at 50% 50%);
     }
+    .hidden {
+      appearance: none;
+      border: 0;
+      padding: 0;
+      margin: 0;
+      background: transparent;
+      min-width: 5.14em;
+      color: inherit;
+    }
     a {
       text-decoration: none;
       color: inherit;
@@ -127,12 +136,12 @@
           <paper-button raised><a href="/signin">Sign In</a></paper-button>
           {% endif %}
           {% if path == '/main' %}
-          <paper-button raised>
-            <form method="post" action="/signout">
-              <input type="hidden" name="csrf_token" value="{{csrf_token}}">
-              <input type="submit" value="Sign Out" />
-            </form>
-          </paper-button>
+          <form method="post" action="/signout">
+            <input type="hidden" name="csrf_token" value="{{csrf_token}}">
+            <button type="submit" class="hidden" name="submit">
+              <paper-button raised>Sign Out</paper-button>
+            </button>
+          </form>
           {% endif %}
         </paper-toolbar>
 

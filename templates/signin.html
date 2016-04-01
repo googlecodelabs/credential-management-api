@@ -14,8 +14,12 @@
                   <paper-input id="lemail" name="email" label="email" autocomplete="username"></paper-input>
                   <paper-input id="lpassword" type="password" name="password" label="password" autocomplete="current-password"></paper-input>
                   <div class="buttons">
-                    <paper-button dialog-dismiss raised>Canel</paper-button>
-                    <paper-button raised><input type="submit" /></paper-button>
+                    <button class="hidden">
+                      <paper-button raised><a href="/">Cancel</a></paper-button>
+                    </button>
+                    <button type="submit" class="hidden" name="button">
+                      <paper-button raised>Sign In</paper-button>
+                    </button>
                   </div>
                 </form>
                 <div class="layout horizontal center-justified">

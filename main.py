@@ -158,17 +158,17 @@ def pwauth():
 
     # If the store doesn't exist, fail.
     if store is None:
-        return redirect(url_for('signin', quote='You are not registered'))
+        return redirect(url_for('signin', quote='Authentication failed'))
 
     profile = store.profile
 
     # If the profile doesn't exist, fail.
     if profile is None:
-        return redirect(url_for('signin', quote='Something went wrong'))
+        return redirect(url_for('signin', quote='Authentication failed'))
 
     # If the password doesn't match, fail.
     if CredentialStore.verify(password, profile['password']) is False:
-        return make_response('Authentication failed.', 401)
+        return redirect(url_for('signin', quote='Authentication failed'))
 
     session['id'] = email
 
@@ -188,7 +188,7 @@ def gauth():
     # Additional verification: See if `iss` matches Google issuer string
     if idinfo['iss'] not in ['accounts.google.com',
                              'https://accounts.google.com']:
-        return make_response('Wrong Issuer.', 401)
+        return redirect(url_for('signin', quote='Authentication failed'))
 
     id = idinfo['sub']
 
@@ -222,7 +222,7 @@ def fblogin():
 
     # If the access_token is `None`, fail.
     if access_token is None:
-        return make_response('Authentication failed.', 401)
+        return redirect(url_for('signin', quote='Authentication failed'))
 
     # Verify the access token using Facebook API
     params = {
@@ -235,7 +235,7 @@ def fblogin():
 
     # If the response includes `is_valid` being false, fail
     if result['data']['is_valid'] is False:
-        return make_response('Authentication failed.', 401)
+        return redirect(url_for('signin', quote='Authentication failed'))
 
     # Make an API request to Facebook using OAuth
     r = urlfetch.fetch('https://graph.facebook.com/me?fields=name,email',
@@ -278,7 +278,7 @@ def register():
             'imageUrl': '/images/default_img.png'
         }
     else:
-        return make_response('Bad request', 400)
+        return redirect(url_for('/', quote='Something went wrong'))
 
     # Overwrite existing user
     store = CredentialStore(id=profile['id'], profile=profile)

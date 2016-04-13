@@ -158,14 +158,12 @@ def pwauth():
 
     # If the store doesn't exist, fail.
     if store is None:
-        print 'store not found'
         return redirect(url_for('signin', quote='You are not registered'))
 
     profile = store.profile
 
     # If the profile doesn't exist, fail.
     if profile is None:
-        print 'profile not found'
         return redirect(url_for('signin', quote='Something went wrong'))
 
     # If the password doesn't match, fail.
@@ -208,7 +206,6 @@ def gauth():
         'name':      idinfo.get('name', None),
         'email':     idinfo.get('email', None)
     }
-    print store.profile
     store.put()
 
     session['id'] = id

@@ -107,14 +107,6 @@
         <paper-menu class="content" selected="{{selected}}">{% endraw %}
           <paper-item><a href="/">Home</a></paper-item>
           <paper-item>How to use</paper-item>
-          {% if path == '/main' %}
-          <paper-item>
-            <form method="post" action="/unregister">
-              <input type="hidden" name="csrf_token" value="{{csrf_token}}" />
-              <input type="submit" value="Unregister" />
-            </form>
-          </paper-item>
-          {% endif %}
         </paper-menu>
         </paper-menu>
 
@@ -136,12 +128,7 @@
           <paper-button raised><a href="/signin">Sign In</a></paper-button>
           {% endif %}
           {% if path == '/main' %}
-          <form method="post" action="/signout">
-            <input type="hidden" name="csrf_token" value="{{csrf_token}}">
-            <button type="submit" class="hidden" name="submit">
-              <paper-button raised>Sign Out</paper-button>
-            </button>
-          </form>
+          <paper-button raised><a href="/signout">Sign Out</a></paper-button>
           {% endif %}
         </paper-toolbar>
 

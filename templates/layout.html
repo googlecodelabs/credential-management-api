@@ -108,7 +108,6 @@
           <paper-item><a href="/">Home</a></paper-item>
           <paper-item>How to use</paper-item>
         </paper-menu>
-        </paper-menu>
 
       </paper-scroll-header-panel>
 
@@ -126,8 +125,7 @@
           <!-- Toolbar icons -->
           {% if path == '/' %}
           <paper-button raised><a href="/signin">Sign In</a></paper-button>
-          {% endif %}
-          {% if path == '/main' %}
+          {% elif path == '/main' %}
           <paper-button raised><a href="/signout">Sign Out</a></paper-button>
           {% endif %}
         </paper-toolbar>

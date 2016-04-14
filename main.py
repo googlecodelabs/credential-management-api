@@ -278,7 +278,7 @@ def register():
             'imageUrl': '/images/default_img.png'
         }
     else:
-        return redirect(url_for('/', quote='Something went wrong'))
+        return redirect(url_for('index', quote='Something went wrong'))
 
     # Overwrite existing user
     store = CredentialStore(id=profile['id'], profile=profile)
@@ -316,7 +316,7 @@ def unregister():
                             quote='You are unregistered'))
 
 
-@app.route('/signout', methods=['POST'])
+@app.route('/signout')
 def signout():
     # Terminate sessions
     session.pop('id', None)

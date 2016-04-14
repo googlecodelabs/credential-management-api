@@ -1,23 +1,13 @@
 {% extends "layout.html" %}
 {% block body %}
             <div class="layout center vertical">
-              <template is="dom-if" if="[[!cmaEnabled]]">
-                <p>Credential Management API is not available on your browser.
-                Try <a href="https://www.google.com/chrome/">Google Chrome 49 or
-                later</a> and enable the flag at
-                chrome://flags/#enable-credential-manager-api .
-                </p>
-              </template>
               <paper-card heading="Please sign-in">
                 <form id="form" method="post" action="/auth/password">
                   <input id="csrf_token" type="hidden" name="csrf_token" value="{{csrf_token}}" />
                   <paper-input id="lemail" name="email" label="email" autocomplete="username"></paper-input>
                   <paper-input id="lpassword" type="password" name="password" label="password" autocomplete="current-password"></paper-input>
-                  <div class="buttons">
-                    <button class="hidden">
-                      <paper-button raised><a href="/">Cancel</a></paper-button>
-                    </button>
-                    <button type="submit" class="hidden" name="button">
+                  <div class="layout horizontal around-justified buttons">
+                    <button type="submit" id="pwsignin" class="hidden" name="button">
                       <paper-button raised>Sign In</paper-button>
                     </button>
                   </div>
@@ -25,10 +15,10 @@
                 <div class="layout horizontal center-justified">
                   <span>or</span>
                 </div>
-                <div class="gsignin" on-tap="onGSignIn">
+                <div id="gsignin">
                   <img src="images/google_signin.png" />
                 </div>
-                <div class="fbsignin" on-tap="onFbSignIn">
+                <div id="fbsignin">
                   <img src="images/facebook_signin.png" />
                 </div>
               </paper-card>

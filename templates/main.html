@@ -1,17 +1,16 @@
 {% extends "layout.html" %}
 {% block body %}
             <div class="layout center vertical">
-              <template is="dom-if" if="[[!cmaEnabled]]">
-                <p>Credential Management API is not available on your browser.
-                Try <a href="https://www.google.com/chrome/">Google Chrome 49 or
-                later</a> and enable the flag at
-                chrome://flags/#enable-credential-manager-api .
-                </p>
-              </template>
               <div class="profile layout center vertical">
                 <h2>Welcome! <span>{{name}}</span></h2>
                 <div class="flex">
                   <img src="{{imageUrl}}"/>
                 </div>
               </div>
+              <form method="post" action="/unregister">
+                <input type="hidden" name="csrf_token" value="{{csrf_token}}" />
+                <button type="submit" class="hidden" value="Unregister">
+                  <paper-button raised>Unregister</paper-button>
+                </button>
+              </form>
             </div>{% endblock %}

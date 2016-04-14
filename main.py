@@ -316,7 +316,7 @@ def unregister():
                             quote='You are unregistered'))
 
 
-@app.route('/signout', methods=['POST'])
+@app.route('/signout')
 def signout():
     # Terminate sessions
     session.pop('id', None)

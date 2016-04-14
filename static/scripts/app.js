@@ -27,73 +27,88 @@ app.listeners = {
   'show-toast': 'showToast'
 };
 
-/**
- * When google sign-in button is pressed.
- * @return {void}
- */
-app.onGSignIn = function() {
-  gSignIn()
-  .then(function(googleUser) {
-    // Now user is successfully authenticated with Google.
-    // Send ID Token to the server to authenticate with our server.
-    var form = document.createElement('form');
-    form.method = 'POST';
-    form.action = '/auth/google';
+app.addEventListener('dom-change', function() {
+  /**
+   * When google sign-in button is pressed.
+   * @return {void}
+   */
+  var gsignin = document.querySelector('#gsignin');
+  if (gsignin) {
+    gsignin.addEventListener('click', function() {
+      gSignIn()
+      .then(function(googleUser) {
+        // Now user is successfully authenticated with Google.
+        // Send ID Token to the server to authenticate with our server.
+        var form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/auth/google';
 
-    var id_token = document.createElement('input');
-    id_token.name = 'id_token';
-    id_token.value = googleUser.getAuthResponse().id_token;
-    form.appendChild(id_token);
+        var id_token = document.createElement('input');
+        id_token.name = 'id_token';
+        id_token.value = googleUser.getAuthResponse().id_token;
+        form.appendChild(id_token);
 
-    var csrf_token = document.createElement('input');
-    csrf_token.name = 'csrf_token';
-    csrf_token.value = document.querySelector('#csrf_token').value;
-    form.appendChild(csrf_token);
+        var csrf_token = document.createElement('input');
+        csrf_token.name = 'csrf_token';
+        csrf_token.value = document.querySelector('#csrf_token').value;
+        form.appendChild(csrf_token);
 
-    document.body.appendChild(form);
-    form.submit();
-  }).catch(function() {
-    app.fire('show-toast', {
-      text: 'Google Sign-In failed'
+        document.body.appendChild(form);
+        form.submit();
+      }).catch(function() {
+        app.fire('show-toast', {
+          text: 'Google Sign-In failed'
+        });
+      });
     });
-  });
-};
+  }
 
-/**
- * When facebook login button is pressed.
- * @return {void}
- */
-app.onFbSignIn = function() {
-  fbSignIn()
-  .then(function(res) {
-    // On successful authentication with Facebook
-    if (res.status == 'connected') {
-      var form = document.createElement('form');
-      form.method = 'POST';
-      form.action = '/auth/facebook';
+  /**
+   * When facebook login button is pressed.
+   * @return {void}
+   */
+  var fbsignin = document.querySelector('#fbsignin');
+  if (fbsignin) {
+    fbsignin.addEventListener('click', function() {
+      fbSignIn().then(function(res) {
+        // On successful authentication with Facebook
+        if (res.status == 'connected') {
+          var form = document.createElement('form');
+          form.method = 'POST';
+          form.action = '/auth/facebook';
 
-      var access_token = document.createElement('input');
-      access_token.name = 'access_token';
-      access_token.value = res.authResponse.accessToken;
-      form.appendChild(access_token);
+          var access_token = document.createElement('input');
+          access_token.name = 'access_token';
+          access_token.value = res.authResponse.accessToken;
+          form.appendChild(access_token);
 
-      var csrf_token = document.createElement('input');
-      csrf_token.name = 'csrf_token';
-      csrf_token.value = document.querySelector('#csrf_token').value;
-      form.appendChild(csrf_token);
+          var csrf_token = document.createElement('input');
+          csrf_token.name = 'csrf_token';
+          csrf_token.value = document.querySelector('#csrf_token').value;
+          form.appendChild(csrf_token);
 
-      document.body.appendChild(form);
-      form.submit();
-    } else {
-      // When authentication was rejected by Facebook
-      return Promise.reject();
-    }
-  }).catch(function() {
-    app.fire('show-toast', {
-      text: 'Facebook login failed'
+          document.body.appendChild(form);
+          form.submit();
+        } else {
+          // When authentication was rejected by Facebook
+          return Promise.reject();
+        }
+      }).catch(function() {
+        app.fire('show-toast', {
+          text: 'Facebook login failed'
+        });
+      });
     });
-  });
-};
+  }
+
+  var url = new URL(location.href);
+  var params = new URLSearchParams(url.search.slice(1));
+  if (params.get('quote')) {
+    app.fire('show-toast', {
+      text: params.get('quote')
+    });
+  }
+});
 
 /**
  * Polymer event handler to show a toast.
@@ -104,13 +119,3 @@ app.showToast = function(e) {
   this.$.toast.text = e.detail.text;
   this.$.toast.show();
 };
-
-setTimeout(function() {
-  var url = new URL(location.href);
-  var params = new URLSearchParams(url.search.slice(1));
-  if (params.get('quote')) {
-    app.fire('show-toast', {
-      text: params.get('quote')
-    });
-  }
-}, 1000);

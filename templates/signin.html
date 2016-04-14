@@ -13,8 +13,8 @@
                   <input id="csrf_token" type="hidden" name="csrf_token" value="{{csrf_token}}" />
                   <paper-input id="lemail" name="email" label="email" autocomplete="username"></paper-input>
                   <paper-input id="lpassword" type="password" name="password" label="password" autocomplete="current-password"></paper-input>
-                  <div class="buttons">
-                    <button type="submit" class="hidden" name="button">
+                  <div class="layout horizontal around-justified buttons">
+                    <button type="submit" id="pwsignin" class="hidden" name="button">
                       <paper-button raised>Sign In</paper-button>
                     </button>
                   </div>
@@ -22,10 +22,10 @@
                 <div class="layout horizontal center-justified">
                   <span>or</span>
                 </div>
-                <div class="gsignin" on-tap="onGSignIn">
+                <div id="gsignin">
                   <img src="images/google_signin.png" />
                 </div>
-                <div class="fbsignin" on-tap="onFbSignIn">
+                <div id="fbsignin">
                   <img src="images/facebook_signin.png" />
                 </div>
               </paper-card>

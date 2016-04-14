@@ -1,13 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
             <div class="layout center vertical">
-              <template is="dom-if" if="[[!cmaEnabled]]">
-                <p>Credential Management API is not available on your browser.
-                Try <a href="https://www.google.com/chrome/">Google Chrome 49 or
-                later</a> and enable the flag at
-                chrome://flags/#enable-credential-manager-api .
-                </p>
-              </template>
               <paper-card heading="Please sign-in">
                 <form id="form" method="post" action="/auth/password">
                   <input id="csrf_token" type="hidden" name="csrf_token" value="{{csrf_token}}" />

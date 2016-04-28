@@ -23,21 +23,15 @@ import binascii
 import json
 import urllib
 from bcrypt import bcrypt
-from flask import Flask, request, make_response, render_template, session, redirect, url_for, session
+from flask import Flask, request, make_response, render_template,\
+                  session, redirect, url_for
 from oauth2client import client
 
 from google.appengine.ext import ndb
 from google.appengine.api import urlfetch
 
-FACEBOOK_APPID=os.getenv('FACEBOOK_APPID')
-
-app = Flask(
-    __name__,
-    static_url_path='',
-    static_folder='static',
-    template_folder='templates'
-)
-app.debug = True
+FACEBOOK_APPID = os.getenv('FACEBOOK_APPID')
+FACEBOOK_APPTOKEN = os.getenv('FACEBOOK_APPTOKEN', None)
 
 # Does `client_secrets.json` file exist?
 if os.path.isfile('client_secrets.json') is False:
@@ -47,6 +41,14 @@ if os.path.isfile('client_secrets.json') is False:
 keys = json.loads(open('client_secrets.json', 'r').read())['web']
 
 CLIENT_ID = keys['client_id']
+
+app = Flask(
+    __name__,
+    static_url_path='',
+    static_folder='static',
+    template_folder='templates'
+)
+app.debug = True
 
 # `SECRET_KEY` can be anything as long as it is hidden, but we use
 # `client_secret` here for convenience
@@ -137,6 +139,7 @@ def main():
                            name=profile['name'],
                            imageUrl=profile['imageUrl'],
                            csrf_token=session['csrf_token'])
+
 
 @app.route('/signin')
 def signin():
@@ -231,10 +234,13 @@ def fblogin():
     if access_token is None:
         return redirect(url_for('signin', quote='Authentication failed'))
 
+    app_token =\
+        FACEBOOK_APPTOKEN if FACEBOOK_APPTOKEN is not None else access_token
+
     # Verify the access token using Facebook API
     params = {
         'input_token':  access_token,
-        'access_token': access_token
+        'access_token': app_token
     }
     r = urlfetch.fetch('https://graph.facebook.com/debug_token?' +
                        urllib.urlencode(params))

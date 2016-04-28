@@ -29,6 +29,8 @@ from oauth2client import client
 from google.appengine.ext import ndb
 from google.appengine.api import urlfetch
 
+FACEBOOK_APPID=os.getenv('FACEBOOK_APPID')
+
 app = Flask(
     __name__,
     static_url_path='',
@@ -104,6 +106,7 @@ def index():
     return render_template('index.html',
                            path=request.path,
                            client_id=CLIENT_ID,
+                           FACEBOOK_APPID=FACEBOOK_APPID,
                            csrf_token=session['csrf_token'])
 
 
@@ -143,6 +146,7 @@ def signin():
     return render_template('signin.html',
                            path=request.path,
                            client_id=CLIENT_ID,
+                           FACEBOOK_APPID=FACEBOOK_APPID,
                            csrf_token=session['csrf_token'])
 
 

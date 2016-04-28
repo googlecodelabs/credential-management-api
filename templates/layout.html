@@ -140,6 +140,9 @@
 
   <script src="scripts/app.js"></script>
   {% if path == '/' or path == '/signin' %}
+  <script>
+    var FB_APPID = '{{FACEBOOK_APPID}}';
+  </script>
   <script src="scripts/federation.js"></script>
   {% endif %}
 </body>

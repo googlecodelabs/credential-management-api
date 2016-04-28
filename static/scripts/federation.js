@@ -1,8 +1,7 @@
-var FB_APPID       = '705099176296510';
 var PASSWORD_LOGIN = 'password';
 var GOOGLE_SIGNIN  = 'https://accounts.google.com';
 var FACEBOOK_LOGIN = 'https://www.facebook.com';
-var DEFAULT_IMG    = '/images/default_img.png';
+var DEFAULT_IMG    = location.origin+'/images/default_img.png';
 
 /**
  * Let user sign-in using Google Sign-in
@@ -29,7 +28,7 @@ var fbSignIn = function() {
       if (res.status == 'connected') {
         resolve(res);
       } else {
-        FB.login(resolve);
+        FB.login(resolve, {scope: 'email'});
       }
     });
   });

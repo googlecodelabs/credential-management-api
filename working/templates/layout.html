@@ -107,6 +107,10 @@
         <paper-menu class="content">
           <a href="/"><paper-item>Home</paper-item></a>
         </paper-menu>
+        {% if path == '/main' %}
+        <input id="csrf_token" type="hidden" name="csrf_token" value="{{csrf_token}}" />
+        <paper-item on-tap="onUnreg">Unregister</paper-item>
+        {% endif %}
 
       </paper-scroll-header-panel>
 
@@ -151,6 +155,9 @@
   {% endif %}
   {% if path == '/signin' %}
   <script src="scripts/signin.js"></script>
+  {% endif %}
+  {% if path == '/main' %}
+  <script src="scripts/main.js"></script>
   {% endif %}
 </body>
 </html>

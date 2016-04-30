@@ -1,7 +1,8 @@
 var autoSignIn = function(unmediated) {
   if (navigator.credentials) {
     return navigator.credentials.get({
-      password: true
+      password: true,
+      unmediated: unmediated
     })
     .then(function(cred) {
       if (cred) {

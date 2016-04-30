@@ -312,22 +312,21 @@ def unregister():
 
     # If session includes `id`, the user is already signed in
     if id is None:
-        return redirect(url_for('main'))
+        return make_response('Authentication failed', 401)
     store = CredentialStore.get_by_id(id)
     if store is None:
-        return redirect(url_for('main'))
+        return make_response('Authentication failed', 401)
 
     profile = store.profile
 
     if profile is None:
-        return redirect(url_for('main'))
+        return make_response('Authentication failed', 401)
 
     # Remove the user account
     CredentialStore.remove(id)
 
     # Not terminating a session for demo purpose/simplicity
-    return redirect(url_for('index',
-                            quote='You are unregistered'))
+    return make_response('Unregistered', 200)
 
 
 @app.route('/signout')

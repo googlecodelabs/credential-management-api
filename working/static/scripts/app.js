@@ -83,7 +83,8 @@ app.addEventListener('dom-change', function() {
   if (fbsignin) {
     fbsignin.addEventListener('click', function() {
       var access_token = '';
-      fbSignIn().then(function(res) {
+      fbSignIn()
+      .then(function(res) {
         return new Promise(function(resolve, reject) {
           // On successful authentication with Facebook
           if (res.status == 'connected') {
@@ -118,15 +119,13 @@ app.addEventListener('dom-change', function() {
             } else {
               return Promise.resolve();
             }
-          } else {
-            return Promise.reject();
           }
-        })
-      }).then(function() {
-        location.href = '/main?quote=You are signed in with Facebook Login';
-      }, function() {
-        app.fire('show-toast', {
-          text: 'Facebook login failed'
+        }).then(function() {
+          location.href = '/main?quote=You are signed in with Facebook Login';
+        }, function() {
+          app.fire('show-toast', {
+            text: 'Facebook login failed'
+          });
         });
       });
     });

@@ -161,30 +161,29 @@ def pwauth():
     password = request.form.get('password', None)[:32]
 
     if not email or not password:
-        return redirect(url_for('signin', quote='Authentication failed'))
+        return make_response('Authentication failed', 401)
 
     # Obtain Datastore entry by email address
     store = CredentialStore.get_by_id(email)
 
     # If the store doesn't exist, fail.
     if store is None:
-        return redirect(url_for('signin', quote='Authentication failed'))
+        return make_response('Authentication failed', 401)
 
     profile = store.profile
 
     # If the profile doesn't exist, fail.
     if profile is None:
-        return redirect(url_for('signin', quote='Authentication failed'))
+        return make_response('Authentication failed', 401)
 
     # If the password doesn't match, fail.
     if CredentialStore.verify(password, profile['password']) is False:
-        return redirect(url_for('signin', quote='Authentication failed'))
+        return make_response('Authentication failed', 401)
 
     session['id'] = email
 
     # Not making a session for demo purpose/simplicity
-    return redirect(url_for('main',
-                            quote='You are signed in with id/password'))
+    return make_response('Authenticated', 200)
 
 
 @app.route('/auth/google', methods=['POST'])

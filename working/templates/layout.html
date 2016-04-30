@@ -123,7 +123,7 @@
 
           <!-- Toolbar icons -->
           {% if path == '/' %}
-          <paper-button raised><a href="/signin">Sign In</a></paper-button>
+          <paper-button on-tap="onSignIn" raised>Sign In</paper-button>
           {% elif path == '/main' %}
           <paper-button raised><a href="/signout">Sign Out</a></paper-button>
           {% endif %}
@@ -144,6 +144,7 @@
     var FB_APPID = '{{FACEBOOK_APPID}}';
   </script>
   <script src="scripts/federation.js"></script>
+  <script src="scripts/auto.js"></script>
   {% endif %}
   {% if path == '/' %}
   <script src="scripts/index.js"></script>

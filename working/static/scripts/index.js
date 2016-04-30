@@ -27,3 +27,12 @@ app.onReg = function() {
     });
   });
 };
+
+app.onSignIn = function() {
+  autoSignIn(false)
+  .then(function() {
+    location.href = '/main';
+  }, function() {
+    location.href = '/signin';
+  });
+};

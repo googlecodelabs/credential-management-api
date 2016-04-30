@@ -197,7 +197,7 @@ def gauth():
     # Additional verification: See if `iss` matches Google issuer string
     if idinfo['iss'] not in ['accounts.google.com',
                              'https://accounts.google.com']:
-        return redirect(url_for('signin', quote='Authentication failed'))
+        return make_response('Authentication failed', 401)
 
     id = idinfo['sub']
 
@@ -220,8 +220,7 @@ def gauth():
     session['id'] = id
 
     # Not making a session for demo purpose/simplicity
-    return redirect(url_for('main',
-                            quote='You are signed in with Google'))
+    return make_response('Authenticated', 200)
 
 
 @app.route('/auth/facebook', methods=['POST'])
@@ -231,7 +230,7 @@ def fblogin():
 
     # If the access_token is `None`, fail.
     if access_token is None:
-        return redirect(url_for('signin', quote='Authentication failed'))
+        return make_response('Authentication failed', 401)
 
     app_token =\
         FACEBOOK_APPTOKEN if FACEBOOK_APPTOKEN is not None else access_token
@@ -247,7 +246,7 @@ def fblogin():
 
     # If the response includes `is_valid` being false, fail
     if result['data']['is_valid'] is False:
-        return redirect(url_for('signin', quote='Authentication failed'))
+        return make_response('Authentication failed', 401)
 
     # Make an API request to Facebook using OAuth
     r = urlfetch.fetch('https://graph.facebook.com/me?fields=name,email',
@@ -267,8 +266,7 @@ def fblogin():
     session['id'] = id
 
     # Not making a session for demo purpose/simplicity
-    return redirect(url_for('main',
-                            quote='You are signed in with Facebook'))
+    return make_response('Authenticated', 200)
 
 
 @app.route('/register', methods=['POST'])

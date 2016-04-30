@@ -39,23 +39,35 @@ app.addEventListener('dom-change', function() {
       .then(function(googleUser) {
         // Now user is successfully authenticated with Google.
         // Send ID Token to the server to authenticate with our server.
-        var form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '/auth/google';
+        var form = new FormData();
+        form.append('id_token', googleUser.getAuthResponse().id_token);
+        form.append('csrf_token', document.querySelector('#csrf_token').value);
 
-        var id_token = document.createElement('input');
-        id_token.name = 'id_token';
-        id_token.value = googleUser.getAuthResponse().id_token;
-        form.appendChild(id_token);
-
-        var csrf_token = document.createElement('input');
-        csrf_token.name = 'csrf_token';
-        csrf_token.value = document.querySelector('#csrf_token').value;
-        form.appendChild(csrf_token);
-
-        document.body.appendChild(form);
-        form.submit();
-      }).catch(function() {
+        return fetch('/auth/google', {
+          method: 'POST',
+          credentials: 'include',
+          body: form
+        }).then(function(res) {
+          if (res.status === 200) {
+            if (navigator.credentials) {
+              var profile = googleUser.getBasicProfile();
+              var cred = new FederatedCredential({
+                id: profile.getEmail(),
+                name: profile.getName(),
+                iconURL: profile.getImageUrl(),
+                provider: GOOGLE_SIGNIN
+              });
+              return navigator.credentials.store(cred);
+            } else {
+              return Promise.resolve();
+            }
+          } else {
+            return Promise.reject();
+          }
+        });
+      }).then(function() {
+        location.href = '/main?quote=You are signed in with Google SignIn';
+      }, function() {
         app.fire('show-toast', {
           text: 'Google Sign-In failed'
         });
@@ -70,30 +82,49 @@ app.addEventListener('dom-change', function() {
   var fbsignin = document.querySelector('#fbsignin');
   if (fbsignin) {
     fbsignin.addEventListener('click', function() {
+      var access_token = '';
       fbSignIn().then(function(res) {
-        // On successful authentication with Facebook
-        if (res.status == 'connected') {
-          var form = document.createElement('form');
-          form.method = 'POST';
-          form.action = '/auth/facebook';
+        return new Promise(function(resolve, reject) {
+          // On successful authentication with Facebook
+          if (res.status == 'connected') {
+            access_token = res.authResponse.accessToken;
+            FB.api('/me', resolve);
+          } else {
+            // When authentication was rejected by Facebook
+            reject();
+          }
+        });
+      })
+      .then(function(profile) {
+        var form = new FormData();
+        form.append('access_token', access_token);
+        form.append('csrf_token', document.querySelector('#csrf_token').value);
 
-          var access_token = document.createElement('input');
-          access_token.name = 'access_token';
-          access_token.value = res.authResponse.accessToken;
-          form.appendChild(access_token);
-
-          var csrf_token = document.createElement('input');
-          csrf_token.name = 'csrf_token';
-          csrf_token.value = document.querySelector('#csrf_token').value;
-          form.appendChild(csrf_token);
-
-          document.body.appendChild(form);
-          form.submit();
-        } else {
-          // When authentication was rejected by Facebook
-          return Promise.reject();
-        }
-      }).catch(function() {
+        return fetch('/auth/facebook', {
+          method: 'POST',
+          credentials: 'include',
+          body: form
+        }).then(function(res) {
+          if (res.status === 200) {
+            if (navigator.credentials) {
+              var cred = new FederatedCredential({
+                id: profile.id,
+                name: profile.name,
+                iconURL: 'https://graph.facebook.com/'+
+                  profile.id+'/picture?width=96&height=96',
+                provider: FACEBOOK_LOGIN
+              });
+              return navigator.credentials.store(cred);
+            } else {
+              return Promise.resolve();
+            }
+          } else {
+            return Promise.reject();
+          }
+        })
+      }).then(function() {
+        location.href = '/main?quote=You are signed in with Facebook Login';
+      }, function() {
         app.fire('show-toast', {
           text: 'Facebook login failed'
         });

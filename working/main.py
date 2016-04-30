@@ -282,7 +282,7 @@ def register():
 
     # Validate the parameters POST'ed (intentionally not too strict)
     if not email or not _password:
-        return redirect(url_for('index', quote='Something went wrong'))
+        return make_response('Bad Request', 403)
 
     # Hash password
     password = CredentialStore.hash(_password)
@@ -303,8 +303,7 @@ def register():
     session['id'] = profile['id']
 
     # Not making a session for demo purpose/simplicity
-    return redirect(url_for('main',
-                            quote='Thanks for registering!'))
+    return make_response('Registered', 200)
 
 
 @app.route('/unregister', methods=['POST'])

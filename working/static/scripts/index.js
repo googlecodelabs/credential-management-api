@@ -30,7 +30,7 @@ app.addEventListener('dom-change', function() {
         });
       });
     });
-  };
+  }
 
   var signin = document.querySelector('#signin');
   if (signin) {

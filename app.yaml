@@ -1,0 +1,19 @@
+application: credential-management-api-codelab
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+env_variables:
+  FACEBOOK_APPID: 775126365960457
+
+libraries:
+- name: ssl
+  version: latest
+- name: pycrypto
+  version: latest
+
+handlers:
+- url: .*
+  script: main.app
+  secure: always

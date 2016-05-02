@@ -1,10 +1,10 @@
 {
-  "name": "Credential Management API Sample",
-  "version": "0.1.0",
+  "name": "Credential Management API Codelab",
+  "version": "1.0.0",
   "authors": [
     "Eiji Kitamura <agektmr@google.com>"
   ],
-  "description": "Sample code that runs Credential Management API",
+  "description": "A codelab material for experiencing the Credential Management API",
   "license": "Apache-2.0",
   "ignore": [
     "**/.*",

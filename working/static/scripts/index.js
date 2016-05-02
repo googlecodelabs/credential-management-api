@@ -37,7 +37,7 @@ app.addEventListener('dom-change', function() {
     signin.addEventListener('click', function() {
       autoSignIn(false)
       .then(function() {
-        location.href = '/main';
+        location.href = '/main?quote=You are signed in';
       }, function() {
         location.href = '/signin';
       });

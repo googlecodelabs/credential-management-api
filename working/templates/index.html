@@ -8,7 +8,9 @@
                   <paper-input type="email" id="email" name="email" label="Fake email address" autocomplete="username" error-message="at least email format, please" auto-validate required></paper-input>
                   <paper-input id="password" type="password" name="password" label="Bogus password" autocomplete="new-password" pattern=".{4,32}" error-message="4-32 letters please" auto-validate required></paper-input>
                   <div class="layout horizontal around-justified">
-                    <paper-button on-tap="onReg" raised>Register</paper-button>
+                    <button type="submit" class="hidden" name="button">
+                      <paper-button raised>Register</paper-button>
+                    </button>
                   </div>
                 </form>
                 <div class="layout horizontal center-justified">

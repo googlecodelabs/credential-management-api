@@ -1,5 +1,5 @@
 app.addEventListener('dom-change', function() {
-  var form = document.querySelector('form');
+  var form = document.querySelector('#form');
   if (form) {
     form.addEventListener('submit', function(e) {
       e.preventDefault();

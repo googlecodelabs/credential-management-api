@@ -35,16 +35,14 @@ app.addEventListener('dom-change', function() {
 
   var signout = document.querySelector('#signout');
   if (signout) {
-    signout.addEventListener('click', function(e) {
-      e.preventDefault();
-
+    signout.addEventListener('click', function() {
       if (navigator.credentials) {
         navigator.credentials.requireUserMediation()
         .then(function() {
-          location.href = '/?quote=You are signed out';
+          location.href = '/signout';
         });
       } else {
-        location.href = '/?quote=You are signed out';
+        location.href = '/signout';
       }
     });
   }

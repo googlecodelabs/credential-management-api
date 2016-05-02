@@ -107,10 +107,6 @@
         <paper-menu class="content">
           <a href="/"><paper-item>Home</paper-item></a>
         </paper-menu>
-        {% if path == '/main' %}
-        <input id="csrf_token" type="hidden" name="csrf_token" value="{{csrf_token}}" />
-        <paper-item on-tap="onUnreg">Unregister</paper-item>
-        {% endif %}
 
       </paper-scroll-header-panel>
 
@@ -129,7 +125,7 @@
           {% if path == '/' %}
           <paper-button id="signin" raised>Sign In</paper-button>
           {% elif path == '/main' %}
-          <paper-button raised><a href="/signout">Sign Out</a></paper-button>
+          <paper-button id="signout" raised>Sign Out</paper-button>
           {% endif %}
         </paper-toolbar>
 

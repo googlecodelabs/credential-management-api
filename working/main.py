@@ -279,7 +279,7 @@ def register():
 
     # Validate the parameters POST'ed (intentionally not too strict)
     if not email or not _password:
-        return make_response('Bad Request', 403)
+        return make_response('Bad Request', 400)
 
     # Hash password
     password = CredentialStore.hash(_password)

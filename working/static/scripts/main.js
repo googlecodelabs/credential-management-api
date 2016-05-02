@@ -1,15 +1,13 @@
 app.addEventListener('dom-change', function() {
-  var unregister = document.querySelector('#unregister');
-  if (unregister) {
-    unregister.addEventListener('click', function() {
-      var csrf_token = document.querySelector('#csrf_token').value;
-      var form = new FormData();
-      form.append('csrf_token', csrf_token);
+  var unregForm = document.querySelector('#unregForm');
+  if (unregForm) {
+    unregForm.addEventListener('submit', function(e) {
+      e.preventDefault();
 
       fetch('/unregister', {
         method: 'POST',
         credentials: 'include',
-        body: form
+        body: new FormData(unregForm)
       }).then(function(res) {
         if (res.status === 200) {
           if (navigator.credentials) {

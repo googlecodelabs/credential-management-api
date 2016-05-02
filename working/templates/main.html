@@ -7,9 +7,9 @@
                   <img src="{{imageUrl}}"/>
                 </div>
               </div>
-              <form method="post" action="/unregister">
+              <form method="post" id="unregForm" action="/unregister">
                 <input type="hidden" name="csrf_token" value="{{csrf_token}}" />
-                <button type="submit" id="unregister" class="hidden" value="Unregister">
+                <button type="submit" class="hidden" value="Unregister">
                   <paper-button raised>Unregister</paper-button>
                 </button>
               </form>

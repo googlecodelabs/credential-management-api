@@ -120,12 +120,12 @@ app.addEventListener('dom-change', function() {
               return Promise.resolve();
             }
           }
-        }).then(function() {
-          location.href = '/main?quote=You are signed in with Facebook Login';
-        }, function() {
-          app.fire('show-toast', {
-            text: 'Facebook login failed'
-          });
+        });
+      }).then(function() {
+        location.href = '/main?quote=You are signed in with Facebook Login';
+      }, function() {
+        app.fire('show-toast', {
+          text: 'Facebook login failed'
         });
       });
     });

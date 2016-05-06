@@ -51,6 +51,12 @@ FB.init({
 });
 
 // Initialise Google Sign-In
-gapi.load('auth2', function() {
-  gapi.auth2.init();
-});
+var googleAuthReady = (function() {
+  return new Promise(function(resolve) {
+    gapi.load('auth2', function() {
+      gapi.auth2.init().then(function() {
+        return resolve();
+      });
+    });
+  });
+})();

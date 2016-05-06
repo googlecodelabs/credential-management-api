@@ -62,7 +62,9 @@ var autoSignIn = function(unmediated) {
   }
 };
 
-autoSignIn(true).then(function() {
+googleAuthReady.then(function() {
+  return autoSignIn(true);
+}).then(function() {
   location.href = '/main?quote=You are automatically signed in';
 }, function() {
   console.log('auto sign-in skipped');

@@ -10,6 +10,14 @@ var DEFAULT_IMG    = location.origin+'/images/default_img.png';
  */
 var gSignIn = function(id) {
   var auth2 = gapi.auth2.getAuthInstance();
+  if (auth2.isSignedIn.get()) {
+    // Check if currently signed in user is the same as intended.
+    var googleUser = auth2.currentUser.get();
+    var (googleUser.getBasicProfile().getEmail() === id) {
+      return Promise.resolve(googleUser);
+    }
+  }
+  // If the user is not signed in with the expected account, let sign in.
   return auth2.signIn({
     // Set `login_hint` to specify an intended user account,
     // otherwise user selection dialog will popup.

@@ -1,4 +1,18 @@
 app.addEventListener('dom-change', function() {
+  var signout = document.querySelector('#signout');
+  if (signout) {
+    signout.addEventListener('click', function() {
+      if (navigator.credentials) {
+        navigator.credentials.requireUserMediation()
+        .then(function() {
+          location.href = '/signout';
+        });
+      } else {
+        location.href = '/signout';
+      }
+    });
+  }
+
   var unregForm = document.querySelector('#unregForm');
   if (unregForm) {
     unregForm.addEventListener('submit', function(e) {
@@ -28,20 +42,6 @@ app.addEventListener('dom-change', function() {
           text: 'Unregister failed'
         });
       });
-    });
-  }
-
-  var signout = document.querySelector('#signout');
-  if (signout) {
-    signout.addEventListener('click', function() {
-      if (navigator.credentials) {
-        navigator.credentials.requireUserMediation()
-        .then(function() {
-          location.href = '/signout';
-        });
-      } else {
-        location.href = '/signout';
-      }
     });
   }
 });

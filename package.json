@@ -4,8 +4,12 @@
   "description": "A codelab material for experiencing the Credential Management API",
   "main": "index.js",
   "scripts": {
-    "postinstall": "pip install -t lib -r requirements.txt; bower install;"
+    "preinstall": "git submodule init; git submodule update;",
+    "postinstall": "pip install -t lib -r requirements.txt; node_modules/bower/bin/bower install;"
   },
   "author": "Eiji Kitamura <agektmr@google.com>",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "bower": "^1.7.9"
+  }
 }

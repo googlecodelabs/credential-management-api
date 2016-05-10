@@ -46,47 +46,45 @@ app.addEventListener('dom-change', function() {
 });
 
 /* When google sign-in button is pressed.
-* @return {void}
-*/
+ * @return {void}
+ */
 var gsignin = document.querySelector('#gsignin');
-if (gsignin) {
-  gsignin.addEventListener('click', function() {
-    gSignIn()
-    .then(function(googleUser) {
-      // Now user is successfully authenticated with Google.
-      // Send ID Token to the server to authenticate with our server.
-      var form = new FormData();
-      form.append('id_token', googleUser.getAuthResponse().id_token);
-      form.append('csrf_token', document.querySelector('#csrf_token').value);
+gsignin.addEventListener('click', function() {
+  gSignIn()
+  .then(function(googleUser) {
+    // Now user is successfully authenticated with Google.
+    // Send ID Token to the server to authenticate with our server.
+    var form = new FormData();
+    form.append('id_token', googleUser.getAuthResponse().id_token);
+    form.append('csrf_token', document.querySelector('#csrf_token').value);
 
-      return fetch('/auth/google', {
-        method: 'POST',
-        credentials: 'include',
-        body: form
-      }).then(function(res) {
-        if (res.status === 200) {
-          if (navigator.credentials) {
-            var profile = googleUser.getBasicProfile();
-            var cred = new FederatedCredential({
-              id: profile.getEmail(),
-              name: profile.getName(),
-              iconURL: profile.getImageUrl(),
-              provider: GOOGLE_SIGNIN
-            });
-            return navigator.credentials.store(cred);
-          } else {
-            return Promise.resolve();
-          }
+    return fetch('/auth/google', {
+      method: 'POST',
+      credentials: 'include',
+      body: form
+    }).then(function(res) {
+      if (res.status === 200) {
+        if (navigator.credentials) {
+          var profile = googleUser.getBasicProfile();
+          var cred = new FederatedCredential({
+            id: profile.getEmail(),
+            name: profile.getName(),
+            iconURL: profile.getImageUrl(),
+            provider: GOOGLE_SIGNIN
+          });
+          return navigator.credentials.store(cred);
         } else {
-          return Promise.reject();
+          return Promise.resolve();
         }
-      });
-    }).then(function() {
-      location.href = '/main?quote=You are signed in with Google SignIn';
-    }, function() {
-      app.fire('show-toast', {
-        text: 'Google Sign-In failed'
-      });
+      } else {
+        return Promise.reject();
+      }
+    });
+  }).then(function() {
+    location.href = '/main?quote=You are signed in with Google SignIn';
+  }, function() {
+    app.fire('show-toast', {
+      text: 'Google Sign-In failed'
     });
   });
-}
+});

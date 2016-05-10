@@ -95,46 +95,46 @@
 </head>
 
 <body unresolved class="fullbleed layout vertical">
-  <template id="app" is="dom-bind">
-    <paper-drawer-panel id="paperDrawerPanel">
-      <!-- Drawer Scroll Header Panel -->
-      <paper-scroll-header-panel drawer fixed>
+  <paper-drawer-panel id="paperDrawerPanel">
+    <!-- Drawer Scroll Header Panel -->
+    <paper-scroll-header-panel drawer fixed>
 
-        <!-- Drawer Toolbar -->
-        <paper-toolbar id="drawerToolbar">
-          <span class="paper-font-title">Menu</span>
-        </paper-toolbar>
-        <paper-menu class="content">
-          <a href="/"><paper-item>Home</paper-item></a>
-        </paper-menu>
+      <!-- Drawer Toolbar -->
+      <paper-toolbar id="drawerToolbar">
+        <span class="paper-font-title">Menu</span>
+      </paper-toolbar>
+      <paper-menu class="content">
+        <a href="/"><paper-item>Home</paper-item></a>
+      </paper-menu>
 
-      </paper-scroll-header-panel>
+    </paper-scroll-header-panel>
 
-      <!-- Main Area -->
-      <paper-header-panel main mode="seamed">
+    <!-- Main Area -->
+    <paper-header-panel main mode="seamed">
 
-        <!-- Main Toolbar -->
-        <paper-toolbar id="mainToolbar">
-          <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle>
-          </paper-icon-button>
-          <div class="flex title">
-            Credential Management API Codelab
-          </div>
-
-          <!-- Toolbar icons -->
-          {% if path == '/' %}
-          <paper-button id="signin" raised>Sign In</paper-button>
-          {% elif path == '/main' %}
-          <paper-button id="signout" raised>Sign Out</paper-button>
-          {% endif %}
-        </paper-toolbar>
-
-        <!-- Main Content -->
-        <div class="content">
-          {% block body %}{% endblock %}
+      <!-- Main Toolbar -->
+      <paper-toolbar id="mainToolbar">
+        <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle>
+        </paper-icon-button>
+        <div class="flex title">
+          Credential Management API Codelab
         </div>
-      </paper-header-panel>
-    </paper-drawer-panel>
+
+        <!-- Toolbar icons -->
+        {% if path == '/' %}
+        <paper-button id="signin" raised>Sign In</paper-button>
+        {% elif path == '/main' %}
+        <paper-button id="signout" raised>Sign Out</paper-button>
+        {% endif %}
+      </paper-toolbar>
+
+      <!-- Main Content -->
+      <div class="content">
+        {% block body %}{% endblock %}
+      </div>
+    </paper-header-panel>
+  </paper-drawer-panel>
+  <template id="app" is="dom-bind">
     <paper-toast id="toast" duration="3000"></paper-toast>
   </template>
 

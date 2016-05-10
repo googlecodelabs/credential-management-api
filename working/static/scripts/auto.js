@@ -3,7 +3,7 @@ var autoSignIn = function(unmediated) {
     return navigator.credentials.get({
       password: true,
       federated: {
-        providers: [ GOOGLE_SIGNIN, FACEBOOK_LOGIN ]
+        providers: [ GOOGLE_SIGNIN ]
       },
       unmediated: unmediated
     }).then(function(cred) {
@@ -28,17 +28,6 @@ var autoSignIn = function(unmediated) {
                   var id_token = googleUser.getAuthResponse().id_token;
                   form.append('id_token', id_token);
                   return fetch('/auth/google', {
-                    method: 'POST',
-                    credentials: 'include',
-                    body: form
-                  });
-                });
-              case FACEBOOK_LOGIN:
-                return fbSignIn()
-                .then(function(res) {
-                  var access_token = res.authResponse.accessToken;
-                  form.append('access_token', access_token);
-                  return fetch('/auth/facebook', {
                     method: 'POST',
                     credentials: 'include',
                     body: form

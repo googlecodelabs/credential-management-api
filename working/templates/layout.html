@@ -30,7 +30,6 @@
   <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
   {% if path == '/' or path == '/signin'%}
   <script src="https://apis.google.com/js/platform.js"></script>
-  <script src="https://connect.facebook.net/en_US/sdk.js"></script>
   {% endif %}
 
   <link rel="import" href="elements/elements.vulcanized.html">
@@ -140,9 +139,6 @@
 
   <script src="scripts/app.js"></script>
   {% if path == '/' or path == '/signin' %}
-  <script>
-    var FB_APPID = '{{FACEBOOK_APPID}}';
-  </script>
   <script src="scripts/federation.js"></script>
   <script src="scripts/auto.js"></script>
   {% endif %}

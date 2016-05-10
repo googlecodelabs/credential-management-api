@@ -30,9 +30,6 @@ from oauth2client import client
 from google.appengine.ext import ndb
 from google.appengine.api import urlfetch
 
-FACEBOOK_APPID = os.getenv('FACEBOOK_APPID')
-FACEBOOK_APPTOKEN = os.getenv('FACEBOOK_APPTOKEN', None)
-
 # Does `client_secrets.json` file exist?
 if os.path.isfile('client_secrets.json') is False:
     sys.exit('client_secrets.json not found.')
@@ -108,7 +105,6 @@ def index():
     return render_template('index.html',
                            path=request.path,
                            client_id=CLIENT_ID,
-                           FACEBOOK_APPID=FACEBOOK_APPID,
                            csrf_token=session['csrf_token'])
 
 
@@ -149,7 +145,6 @@ def signin():
     return render_template('signin.html',
                            path=request.path,
                            client_id=CLIENT_ID,
-                           FACEBOOK_APPID=FACEBOOK_APPID,
                            csrf_token=session['csrf_token'])
 
 

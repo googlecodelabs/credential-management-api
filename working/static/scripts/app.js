@@ -75,62 +75,6 @@ app.addEventListener('dom-change', function() {
     });
   }
 
-  /**
-   * When facebook login button is pressed.
-   * @return {void}
-   */
-  var fbsignin = document.querySelector('#fbsignin');
-  if (fbsignin) {
-    fbsignin.addEventListener('click', function() {
-      var access_token = '';
-      fbSignIn()
-      .then(function(res) {
-        return new Promise(function(resolve, reject) {
-          // On successful authentication with Facebook
-          if (res.status == 'connected') {
-            access_token = res.authResponse.accessToken;
-            FB.api('/me', resolve);
-          } else {
-            // When authentication was rejected by Facebook
-            reject();
-          }
-        });
-      })
-      .then(function(profile) {
-        var form = new FormData();
-        form.append('access_token', access_token);
-        form.append('csrf_token', document.querySelector('#csrf_token').value);
-
-        return fetch('/auth/facebook', {
-          method: 'POST',
-          credentials: 'include',
-          body: form
-        }).then(function(res) {
-          if (res.status === 200) {
-            if (navigator.credentials) {
-              var cred = new FederatedCredential({
-                id: profile.id,
-                name: profile.name,
-                iconURL: 'https://graph.facebook.com/'+
-                  profile.id+'/picture?width=96&height=96',
-                provider: FACEBOOK_LOGIN
-              });
-              return navigator.credentials.store(cred);
-            } else {
-              return Promise.resolve();
-            }
-          }
-        });
-      }).then(function() {
-        location.href = '/main?quote=You are signed in with Facebook Login';
-      }, function() {
-        app.fire('show-toast', {
-          text: 'Facebook login failed'
-        });
-      });
-    });
-  }
-
   var url = new URL(location.href);
   var params = new URLSearchParams(url.search.slice(1));
   if (params.get('quote')) {

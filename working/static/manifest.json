@@ -1,6 +1,6 @@
 {
-  "name": "Credential Management API Sample",
-  "short_name": "Credential API Sample",
+  "name": "Credential Management API Codelab",
+  "short_name": "Credential API Codelab",
   "display": "standalone",
   "icons": [{
     "src": "images/homescreen48.png",

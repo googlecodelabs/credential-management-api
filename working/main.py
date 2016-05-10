@@ -223,52 +223,6 @@ def gauth():
     return make_response('Authenticated', 200)
 
 
-@app.route('/auth/facebook', methods=['POST'])
-def fblogin():
-    # The POST should include `access_token` from Facebook
-    access_token = request.form.get('access_token', None)[:3072]
-
-    # If the access_token is `None`, fail.
-    if access_token is None:
-        return make_response('Authentication failed', 401)
-
-    app_token =\
-        FACEBOOK_APPTOKEN if FACEBOOK_APPTOKEN is not None else access_token
-
-    # Verify the access token using Facebook API
-    params = {
-        'input_token':  access_token,
-        'access_token': app_token
-    }
-    r = urlfetch.fetch('https://graph.facebook.com/debug_token?' +
-                       urllib.urlencode(params))
-    result = json.loads(r.content)
-
-    # If the response includes `is_valid` being false, fail
-    if result['data']['is_valid'] is False:
-        return make_response('Authentication failed', 401)
-
-    # Make an API request to Facebook using OAuth
-    r = urlfetch.fetch('https://graph.facebook.com/me?fields=name,email',
-                       headers={'Authorization': 'OAuth '+access_token})
-    idinfo = json.loads(r.content)
-
-    # Obtain the Facebook user's image
-    profile = idinfo
-    id = profile['id']
-    profile['imageUrl'] = 'https://graph.facebook.com/' + id +\
-        '/picture?width=96&height=96'
-
-    # Save the Facebook profile
-    store = CredentialStore(id=id, profile=profile)
-    store.put()
-
-    session['id'] = id
-
-    # Not making a session for demo purpose/simplicity
-    return make_response('Authenticated', 200)
-
-
 @app.route('/register', methods=['POST'])
 def register():
     # The POST should include `email`

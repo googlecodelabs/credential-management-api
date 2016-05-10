@@ -23,14 +23,7 @@
 
 ![](static/images/howto/gsi_config.png)
 
-### Step 2. Configure Facebook Login
-- Set up a new project at [Facebook Developers](https://developers.facebook.com/)
-- Set "Site URL" as your intended origin.
-- Copy and paste the App ID at line 8 of `app.yaml`.
-
-![](static/images/howto/fb_config.png)
-
-### Step 3. Install dependencies
+### Step 2. Install dependencies
 - After cloning this repository, do the following:
 
 ```sh
@@ -41,7 +34,7 @@ $ source env/bin/activate
 $ npm install
 ```
 
-### Step 4. Run the app
+### Step 3. Run the app
 ```sh
 # Launch App Engine at root dir of this project with following command
 $ dev_appserver.py working --host=0.0.0.0 --port=8080 --admin_port=8081

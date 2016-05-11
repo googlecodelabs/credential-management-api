@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block body %}
+            <div class="layout center vertical">
+              <div class="profile layout center vertical">
+                <h2>Welcome! <span>{{name}}</span></h2>
+                <div class="flex">
+                  <img src="{{imageUrl}}"/>
+                </div>
+              </div>
+              <form method="post" id="unregForm" action="/unregister">
+                <input type="hidden" name="csrf_token" value="{{csrf_token}}" />
+                <button type="submit" class="hidden" value="Unregister">
+                  <paper-button raised>Unregister</paper-button>
+                </button>
+              </form>
+            </div>{% endblock %}

@@ -156,29 +156,30 @@ def pwauth():
     password = request.form.get('password', None)[:32]
 
     if not email or not password:
-        return make_response('Authentication failed', 401)
+        return redirect(url_for('signin', quote='Authentication failed'))
 
     # Obtain Datastore entry by email address
     store = CredentialStore.get_by_id(email)
 
     # If the store doesn't exist, fail.
     if store is None:
-        return make_response('Authentication failed', 401)
+        return redirect(url_for('signin', quote='Authentication failed'))
 
     profile = store.profile
 
     # If the profile doesn't exist, fail.
     if profile is None:
-        return make_response('Authentication failed', 401)
+        return redirect(url_for('signin', quote='Authentication failed'))
 
     # If the password doesn't match, fail.
     if CredentialStore.verify(password, profile['password']) is False:
-        return make_response('Authentication failed', 401)
+        return redirect(url_for('signin', quote='Authentication failed'))
 
     session['id'] = email
 
     # Not making a session for demo purpose/simplicity
-    return make_response('Authenticated', 200)
+    return redirect(url_for('main',
+                            quote='You are signed in with id/password'))
 
 
 @app.route('/auth/google', methods=['POST'])
@@ -192,7 +193,7 @@ def gauth():
     # Additional verification: See if `iss` matches Google issuer string
     if idinfo['iss'] not in ['accounts.google.com',
                              'https://accounts.google.com']:
-        return make_response('Authentication failed', 401)
+        return redirect(url_for('signin', quote='Authentication failed'))
 
     id = idinfo['sub']
 
@@ -215,7 +216,8 @@ def gauth():
     session['id'] = id
 
     # Not making a session for demo purpose/simplicity
-    return make_response('Authenticated', 200)
+    return redirect(url_for('main',
+                            quote='You are signed in with Google'))
 
 
 @app.route('/register', methods=['POST'])
@@ -228,7 +230,7 @@ def register():
 
     # Validate the parameters POST'ed (intentionally not too strict)
     if not email or not _password:
-        return make_response('Bad Request', 400)
+        return redirect(url_for('index', quote='Something went wrong'))
 
     # Hash password
     password = CredentialStore.hash(_password)
@@ -249,7 +251,8 @@ def register():
     session['id'] = profile['id']
 
     # Not making a session for demo purpose/simplicity
-    return make_response('Registered', 200)
+    return redirect(url_for('main',
+                            quote='Thanks for registering!'))
 
 
 @app.route('/unregister', methods=['POST'])
@@ -259,21 +262,22 @@ def unregister():
 
     # If session includes `id`, the user is already signed in
     if id is None:
-        return make_response('Authentication failed', 401)
+        return redirect(url_for('main'))
     store = CredentialStore.get_by_id(id)
     if store is None:
-        return make_response('Authentication failed', 401)
+        return redirect(url_for('main'))
 
     profile = store.profile
 
     if profile is None:
-        return make_response('Authentication failed', 401)
+        return redirect(url_for('main'))
 
     # Remove the user account
     CredentialStore.remove(id)
 
     # Not terminating a session for demo purpose/simplicity
-    return make_response('Unregistered', 200)
+    return redirect(url_for('index',
+                            quote='You are unregistered'))
 
 
 @app.route('/signout')

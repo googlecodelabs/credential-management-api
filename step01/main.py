@@ -156,30 +156,29 @@ def pwauth():
     password = request.form.get('password', None)[:32]
 
     if not email or not password:
-        return redirect(url_for('signin', quote='Authentication failed'))
+        return make_response('Authentication failed', 401)
 
     # Obtain Datastore entry by email address
     store = CredentialStore.get_by_id(email)
 
     # If the store doesn't exist, fail.
     if store is None:
-        return redirect(url_for('signin', quote='Authentication failed'))
+        return make_response('Authentication failed', 401)
 
     profile = store.profile
 
     # If the profile doesn't exist, fail.
     if profile is None:
-        return redirect(url_for('signin', quote='Authentication failed'))
+        return make_response('Authentication failed', 401)
 
     # If the password doesn't match, fail.
     if CredentialStore.verify(password, profile['password']) is False:
-        return redirect(url_for('signin', quote='Authentication failed'))
+        return make_response('Authentication failed', 401)
 
     session['id'] = email
 
     # Not making a session for demo purpose/simplicity
-    return redirect(url_for('main',
-                            quote='You are signed in with id/password'))
+    return make_response('Authenticated', 200)
 
 
 @app.route('/auth/google', methods=['POST'])
@@ -193,7 +192,7 @@ def gauth():
     # Additional verification: See if `iss` matches Google issuer string
     if idinfo['iss'] not in ['accounts.google.com',
                              'https://accounts.google.com']:
-        return redirect(url_for('signin', quote='Authentication failed'))
+        return make_response('Authentication failed', 401)
 
     id = idinfo['sub']
 
@@ -216,8 +215,7 @@ def gauth():
     session['id'] = id
 
     # Not making a session for demo purpose/simplicity
-    return redirect(url_for('main',
-                            quote='You are signed in with Google'))
+    return make_response('Authenticated', 200)
 
 
 @app.route('/register', methods=['POST'])
@@ -261,22 +259,21 @@ def unregister():
 
     # If session includes `id`, the user is already signed in
     if id is None:
-        return redirect(url_for('main'))
+        return make_response('Authentication failed', 401)
     store = CredentialStore.get_by_id(id)
     if store is None:
-        return redirect(url_for('main'))
+        return make_response('Authentication failed', 401)
 
     profile = store.profile
 
     if profile is None:
-        return redirect(url_for('main'))
+        return make_response('Authentication failed', 401)
 
     # Remove the user account
     CredentialStore.remove(id)
 
     # Not terminating a session for demo purpose/simplicity
-    return redirect(url_for('index',
-                            quote='You are unregistered'))
+    return make_response('Unregistered', 200)
 
 
 @app.route('/signout')

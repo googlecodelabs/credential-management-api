@@ -192,7 +192,7 @@ def gauth():
     # Additional verification: See if `iss` matches Google issuer string
     if idinfo['iss'] not in ['accounts.google.com',
                              'https://accounts.google.com']:
-        return redirect(url_for('signin', quote='Authentication failed'))
+        return make_response('Authentication failed', 401)
 
     id = idinfo['sub']
 
@@ -215,8 +215,7 @@ def gauth():
     session['id'] = id
 
     # Not making a session for demo purpose/simplicity
-    return redirect(url_for('main',
-                            quote='You are signed in with Google'))
+    return make_response('Authenticated', 200)
 
 
 @app.route('/register', methods=['POST'])

@@ -8,6 +8,7 @@ form.addEventListener('submit', function(e) {
     body: new FormData(form)
   }).then(function(res) {
     if (res.status === 200) {
+      // TODO 5-1: Store the credential upon successful sign-inVj
       location.href = '/main?quote=You are signed in';
     } else {
       app.fire('show-toast', {

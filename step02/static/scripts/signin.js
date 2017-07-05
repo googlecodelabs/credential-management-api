@@ -8,7 +8,7 @@ form.addEventListener('submit', function(e) {
     body: new FormData(form)
   }).then(function(res) {
     if (res.status === 200) {
-      if (navigator.credentials) {
+      if (cmapiAvailable) {
         var cred = new PasswordCredential(form);
         navigator.credentials.store(cred)
         .then(function() {

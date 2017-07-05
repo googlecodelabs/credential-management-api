@@ -3,10 +3,37 @@
             <div class="layout center vertical">
               <paper-card heading="Sign-up now!">
                 <form id="regForm" method="post" action="/register">
-                  <input id="csrf_token" type="hidden" name="csrf_token" value="{{csrf_token}}" />
-                  <paper-input id="name" name="name" label="Whatever name" autocomplete="name" pattern=".{1,32}" error-message="4-32 letters please" auto-validate required></paper-input>
-                  <paper-input type="email" id="email" name="email" label="Fake email address" autocomplete="username" error-message="at least email format, please" auto-validate required></paper-input>
-                  <paper-input id="password" type="password" name="password" label="Bogus password" autocomplete="new-password" pattern=".{4,32}" error-message="4-32 letters please" auto-validate required></paper-input>
+                  <input
+                    id="csrf_token"
+                    type="hidden"
+                    name="csrf_token"
+                    value="{{csrf_token}}" />
+                  <paper-input
+                    id="name"
+                    name="name"
+                    autocomplete="name"
+                    label="Whatever name"
+                    pattern=".{1,32}"
+                    error-message="4-32 letters please"
+                    auto-validate required></paper-input>
+                  <paper-input
+                    type="email"
+                    id="email"
+                    name="email"
+                    autocomplete="username"
+                    label="Fake email address"
+                    error-message="at least email format, please"
+                    auto-validate required></paper-input>
+                  <paper-input
+                    id="password"
+                    type="password"
+                    name="password"
+                    autocomplete="new-password"
+                    label="Bogus password"
+                    pattern=".{4,32}"
+                    error-message="4-32 letters please"
+                    auto-validate
+                    required></paper-input>
                   <div class="layout horizontal around-justified">
                     <button type="submit" class="hidden" name="button">
                       <paper-button raised>Register</paper-button>

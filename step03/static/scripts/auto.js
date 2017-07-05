@@ -1,5 +1,5 @@
 var autoSignIn = function() {
-  if (navigator.credentials) {
+  if (cmapiAvailable) {
     return navigator.credentials.get({
       password: true
     }).then(function(cred) {
@@ -10,11 +10,12 @@ var autoSignIn = function() {
 
         switch (cred.type) {
           case 'password':
-            cred.additionalData = form;
-            cred.idName = 'email';
+            form.append('email', cred.id);
+            form.append('password', cred.password);
             return fetch('/auth/password', {
               method: 'POST',
-              credentials: cred
+              credentials: 'include',
+              body: form
             });
         }
         return Promise.reject();
@@ -32,9 +33,3 @@ var autoSignIn = function() {
     return Promise.reject();
   }
 };
-
-autoSignIn().then(function() {
-  location.href = '/main?quote=You are automatically signed in';
-}, function() {
-  console.log('auto sign-in skipped');
-});

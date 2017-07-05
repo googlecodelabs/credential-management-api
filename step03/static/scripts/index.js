@@ -8,7 +8,7 @@ regForm.addEventListener('submit', function(e) {
     body: new FormData(regForm)
   }).then(function(res) {
     if (res.status === 200) {
-      if (navigator.credentials) {
+      if (cmapiAvailable) {
         var cred = new PasswordCredential(regForm);
         navigator.credentials.store(cred)
         .then(function() {

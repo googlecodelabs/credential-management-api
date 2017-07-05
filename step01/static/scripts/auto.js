@@ -1,0 +1,1 @@
+// TODO 6-1: Define `autoSignIn()` function

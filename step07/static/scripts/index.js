@@ -31,6 +31,10 @@ regForm.addEventListener('submit', function(e) {
 
 var signin = document.querySelector('#signin');
 signin.addEventListener('click', function() {
-  // TODO 6-5: Sign-In a user by pressing a "Sign-In" button
-  location.href = '/signin';
+  autoSignIn()
+  .then(function() {
+    location.href = '/main?quote=You are signed in';
+  }, function() {
+    location.href = '/signin';
+  });
 });

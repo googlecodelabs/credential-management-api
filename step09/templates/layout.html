@@ -1,0 +1,155 @@
+<!doctype html>
+<!--
+/*
+ *
+ * Copyright Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Credential Management API Codelab</title>
+
+  <meta name="google-signin-client_id" content="{{client_id}}">
+  <script src="bower_components/fetch/fetch.js"></script>
+  <script src="bower_components/url-search-params/src/url-search-params.js"></script>
+  <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+  {% if path == '/' or path == '/signin'%}
+  <script src="https://apis.google.com/js/platform.js"></script>
+  {% endif %}
+
+  <link rel="import" href="elements/elements.html">
+  <link rel="shortcut icon" href="/favicon.png">
+  <style>
+    .paper-font-title {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .profile img {
+      width: 96px;
+      height: 96px;
+      clip-path: circle(50% at 50% 50%);
+      -webkit-clip-path: circle(50% at 50% 50%);
+      -moz-clip-path: circle(50% at 50% 50%);
+      -o-clip-path: circle(50% at 50% 50%);
+    }
+    .hidden {
+      appearance: none;
+      border: 0;
+      padding: 0;
+      margin: 0;
+      background: transparent;
+      min-width: 5.14em;
+      color: inherit;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    #gsignin {
+      width: 186px;
+    }
+    #gsignin img {
+      cursor: pointer;
+      width: 100%;
+    }
+    #toast {
+      color: white;
+    }
+    iron-pages > div {
+      margin: 0 16px;
+    }
+    paper-item {
+      cursor: pointer;
+    }
+    paper-card {
+      margin-top: 24px;
+    }
+    paper-card > * {
+      padding: 0 24px 24px 24px;
+    }
+    .howto img {
+      width: 100%;
+      max-width: 300px;
+    }
+    .howto .left {
+      float: left;
+    }
+  </style>
+</head>
+
+<body unresolved class="fullbleed layout vertical">
+  <paper-drawer-panel id="paperDrawerPanel">
+    <!-- Drawer Scroll Header Panel -->
+    <paper-scroll-header-panel drawer fixed>
+
+      <!-- Drawer Toolbar -->
+      <paper-toolbar id="drawerToolbar">
+        <span class="paper-font-title">Menu</span>
+      </paper-toolbar>
+      <paper-menu class="content">
+        <a href="/"><paper-item>Home</paper-item></a>
+      </paper-menu>
+
+    </paper-scroll-header-panel>
+
+    <!-- Main Area -->
+    <paper-header-panel main mode="seamed">
+
+      <!-- Main Toolbar -->
+      <paper-toolbar id="mainToolbar">
+        <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle>
+        </paper-icon-button>
+        <div class="flex title">
+          Credential Management API Codelab
+        </div>
+
+        <!-- Toolbar icons -->
+        {% if path == '/' %}
+        <paper-button id="signin" raised>Sign In</paper-button>
+        {% elif path == '/main' %}
+        <paper-button id="signout" raised>Sign Out</paper-button>
+        {% endif %}
+      </paper-toolbar>
+
+      <!-- Main Content -->
+      <div class="content">
+        {% block body %}{% endblock %}
+      </div>
+    </paper-header-panel>
+  </paper-drawer-panel>
+  <template id="app" is="dom-bind">
+    <paper-toast id="toast" duration="3000"></paper-toast>
+  </template>
+
+  <script src="scripts/app.js"></script>
+  {% if path == '/' or path == '/signin' %}
+  <script src="scripts/federation.js"></script>
+  <script src="scripts/auto.js"></script>
+  {% endif %}
+  {% if path == '/' %}
+  <script src="scripts/index.js"></script>
+  {% endif %}
+  {% if path == '/signin' %}
+  <script src="scripts/signin.js"></script>
+  {% endif %}
+  {% if path == '/main' %}
+  <script src="scripts/main.js"></script>
+  {% endif %}
+</body>
+</html>

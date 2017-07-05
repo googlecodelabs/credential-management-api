@@ -15,6 +15,9 @@
  * limitations under the License.
  */
 
+var cmapiAvailable = navigator.credentials &&
+                     navigator.credentials.preventSilentAccess;
+
 /*
   Although this sample app is using Polymer, most of the interactions are
   handled using regular APIs so you don't have to learn about it.
@@ -45,7 +48,8 @@ app.addEventListener('dom-change', function() {
   }
 });
 
-/* When google sign-in button is pressed.
+/**
+ * When google sign-in button is pressed.
  * @return {void}
  */
 var gsignin = document.querySelector('#gsignin');
@@ -64,18 +68,7 @@ gsignin.addEventListener('click', function() {
       body: form
     }).then(function(res) {
       if (res.status === 200) {
-        if (navigator.credentials) {
-          var profile = googleUser.getBasicProfile();
-          var cred = new FederatedCredential({
-            id: profile.getEmail(),
-            name: profile.getName(),
-            iconURL: profile.getImageUrl(),
-            provider: GOOGLE_SIGNIN
-          });
-          return navigator.credentials.store(cred);
-        } else {
-          return Promise.resolve();
-        }
+        return Promise.resolve();
       } else {
         return Promise.reject();
       }

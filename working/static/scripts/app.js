@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 
+// TODO 4-1: Detect Credential Management API feature
+
 /*
   Although this sample app is using Polymer, most of the interactions are
   handled using regular APIs so you don't have to learn about it.

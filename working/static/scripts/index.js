@@ -8,6 +8,7 @@ regForm.addEventListener('submit', function(e) {
     body: new FormData(regForm)
   }).then(function(res) {
     if (res.status === 200) {
+      // TODO 4-2: Store the credential upon successful registration
       location.href = '/main?quote=You are registered';
     } else {
       app.fire('show-toast', {

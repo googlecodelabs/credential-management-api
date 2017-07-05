@@ -123,7 +123,7 @@
         {% if path == '/' %}
         <paper-button id="signin" raised>Sign In</paper-button>
         {% elif path == '/main' %}
-        <paper-button id="signout" raised><a href="/signout">Sign Out</a></paper-button>
+        <paper-button id="signout" raised>Sign Out</paper-button>
         {% endif %}
       </paper-toolbar>
 
@@ -147,6 +147,9 @@
   {% endif %}
   {% if path == '/signin' %}
   <script src="scripts/signin.js"></script>
+  {% endif %}
+  {% if path == '/main' %}
+  <script src="scripts/main.js"></script>
   {% endif %}
 </body>
 </html>

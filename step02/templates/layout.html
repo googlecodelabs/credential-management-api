@@ -121,9 +121,9 @@
 
         <!-- Toolbar icons -->
         {% if path == '/' %}
-        <paper-button id="signin" raised><a href="/signin">Sign In</a></paper-button>
+        <paper-button id="signin" raised>Sign In</paper-button>
         {% elif path == '/main' %}
-        <paper-button id="signout" raised><a href="/signout">Sign Out</a></paper-button>
+        <paper-button id="signout" raised>Sign Out</paper-button>
         {% endif %}
       </paper-toolbar>
 
@@ -140,12 +140,16 @@
   <script src="scripts/app.js"></script>
   {% if path == '/' or path == '/signin' %}
   <script src="scripts/federation.js"></script>
+  <script src="scripts/auto.js"></script>
   {% endif %}
   {% if path == '/' %}
   <script src="scripts/index.js"></script>
   {% endif %}
   {% if path == '/signin' %}
   <script src="scripts/signin.js"></script>
+  {% endif %}
+  {% if path == '/main' %}
+  <script src="scripts/main.js"></script>
   {% endif %}
 </body>
 </html>

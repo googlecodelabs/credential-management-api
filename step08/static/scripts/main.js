@@ -1,7 +1,7 @@
 var signout = document.querySelector('#signout');
 signout.addEventListener('click', function() {
-  if (navigator.credentials) {
-    navigator.credentials.requireUserMediation()
+  if (cmapiAvailable) {
+    navigator.credentials.preventSilentAccess()
     .then(function() {
       location.href = '/signout';
     });
@@ -20,10 +20,10 @@ unregForm.addEventListener('submit', function(e) {
     body: new FormData(unregForm)
   }).then(function(res) {
     if (res.status === 200) {
-      if (navigator.credentials) {
-        navigator.credentials.requireUserMediation()
+      if (cmapiAvailable) {
+        navigator.credentials.preventSilentAccess()
         .then(function() {
-          location.href = '/?quote=You are signed out';
+          location.href = '/?quote=You are unregistered';
         });
       } else {
         location.href = '/?quote=You are unregistered';

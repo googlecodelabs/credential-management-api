@@ -1,6 +1,7 @@
-var autoSignIn = function() {
+var autoSignIn = function(mode) {
   if (cmapiAvailable) {
     return navigator.credentials.get({
+      // TODO 8-4: Reflect a silent access
       password: true
     }).then(function(cred) {
       if (cred) {

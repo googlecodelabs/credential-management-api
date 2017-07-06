@@ -1,6 +1,7 @@
-var autoSignIn = function() {
+var autoSignIn = function(mode) {
   if (cmapiAvailable) {
     return navigator.credentials.get({
+      // TODO 8-4: Reflect a silent access
       password: true
     }).then(function(cred) {
       if (cred) {
@@ -33,4 +34,10 @@ var autoSignIn = function() {
     return Promise.reject();
   }
 };
-// TODO 7-1: Sign-In a user upon landing the page
+
+// TODO 8-3: Reflect a silent access
+autoSignIn().then(function() {
+  location.href = '/main?quote=You are automatically signed in';
+}, function() {
+  console.log('auto sign-in skipped');
+});

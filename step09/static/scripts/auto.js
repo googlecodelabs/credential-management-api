@@ -1,11 +1,8 @@
-var autoSignIn = function(unmediated) {
-  if (navigator.credentials) {
+var autoSignIn = function(mode) {
+  if (cmapiAvailable) {
     return navigator.credentials.get({
       password: true,
-      federated: {
-        providers: [ GOOGLE_SIGNIN ]
-      },
-      unmediated: unmediated
+      mediation: mode
     }).then(function(cred) {
       if (cred) {
         var form = new FormData();
@@ -14,26 +11,13 @@ var autoSignIn = function(unmediated) {
 
         switch (cred.type) {
           case 'password':
-            cred.additionalData = form;
-            cred.idName = 'email';
+            form.append('email', cred.id);
+            form.append('password', cred.password);
             return fetch('/auth/password', {
               method: 'POST',
-              credentials: cred
+              credentials: 'include',
+              body: form
             });
-          case 'federated':
-            switch (cred.provider) {
-              case GOOGLE_SIGNIN:
-                return gSignIn(cred.id)
-                .then(function(googleUser) {
-                  var id_token = googleUser.getAuthResponse().id_token;
-                  form.append('id_token', id_token);
-                  return fetch('/auth/google', {
-                    method: 'POST',
-                    credentials: 'include',
-                    body: form
-                  });
-                });
-            }
         }
         return Promise.reject();
       } else {
@@ -51,9 +35,7 @@ var autoSignIn = function(unmediated) {
   }
 };
 
-googleAuthReady.then(function() {
-  return autoSignIn(true);
-}).then(function() {
+autoSignIn('silent').then(function() {
   location.href = '/main?quote=You are automatically signed in';
 }, function() {
   console.log('auto sign-in skipped');

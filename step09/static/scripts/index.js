@@ -8,7 +8,7 @@ regForm.addEventListener('submit', function(e) {
     body: new FormData(regForm)
   }).then(function(res) {
     if (res.status === 200) {
-      if (navigator.credentials) {
+      if (cmapiAvailable) {
         var cred = new PasswordCredential(regForm);
         navigator.credentials.store(cred)
         .then(function() {
@@ -31,7 +31,7 @@ regForm.addEventListener('submit', function(e) {
 
 var signin = document.querySelector('#signin');
 signin.addEventListener('click', function() {
-  autoSignIn(false)
+  autoSignIn()
   .then(function() {
     location.href = '/main?quote=You are signed in';
   }, function() {

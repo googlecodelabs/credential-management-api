@@ -33,3 +33,4 @@ var autoSignIn = function() {
     return Promise.reject();
   }
 };
+// TODO 7-1: Sign-In a user upon landing the page

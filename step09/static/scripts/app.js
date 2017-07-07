@@ -68,7 +68,18 @@ gsignin.addEventListener('click', function() {
       body: form
     }).then(function(res) {
       if (res.status === 200) {
-        return Promise.resolve();
+        if (cmapiAvailable) {
+          var profile = googleUser.getBasicProfile();
+          var cred = new FederatedCredential({
+            id: profile.getEmail(),
+            name: profile.getName(),
+            iconURL: profile.getImageUrl(),
+            provider: GOOGLE_SIGNIN
+          });
+          return navigator.credentials.store(cred);
+        } else {
+          return Promise.resolve();
+        }
       } else {
         return Promise.reject();
       }

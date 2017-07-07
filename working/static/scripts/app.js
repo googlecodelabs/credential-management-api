@@ -67,6 +67,7 @@ gsignin.addEventListener('click', function() {
       body: form
     }).then(function(res) {
       if (res.status === 200) {
+        // TODO 9-1: Store a credential on successful sign-in using Google Sign-In
         return Promise.resolve();
       } else {
         return Promise.reject();

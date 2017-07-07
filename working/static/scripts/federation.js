@@ -23,6 +23,7 @@ var gSignIn = function(id) {
   });
 };
 
+// TODO 9-2: Return a promise upon initializing Google Sign-In
 // Initialise Google Sign-In
 gapi.load('auth2', function() {
   gapi.auth2.init();

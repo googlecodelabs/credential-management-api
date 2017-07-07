@@ -23,13 +23,10 @@ var gSignIn = function(id) {
   });
 };
 
-// Initialise Google Sign-In
-var googleAuthReady = (function() {
-  return new Promise(function(resolve) {
-    gapi.load('auth2', function() {
-      gapi.auth2.init().then(function() {
-        return resolve();
-      });
-    });
+// Initialize Google Sign-In
+var googleAuthReady = new Promise(function(resolve) {
+  gapi.load('auth2', function() {
+    gapi.auth2.init().then(resolve);
   });
-})();
+});
+

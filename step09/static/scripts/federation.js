@@ -26,7 +26,9 @@ var gSignIn = function(id) {
 // Initialize Google Sign-In
 var googleAuthReady = new Promise(function(resolve) {
   gapi.load('auth2', function() {
-    gapi.auth2.init().then(resolve);
+    gapi.auth2.init().then(function() {
+      resolve();
+    });
   });
 });
 

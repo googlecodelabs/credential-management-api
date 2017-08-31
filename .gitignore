@@ -1,7 +1,7 @@
 env
-./lib
+lib
 node_modules
 bower_components
-./client_secrets.json
+client_secrets.json
 *.pyc
 package-lock.json

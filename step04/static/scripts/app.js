@@ -15,8 +15,7 @@
  * limitations under the License.
  */
 
-var cmapiAvailable = navigator.credentials &&
-                     navigator.credentials.preventSilentAccess;
+var cmapiAvailable = !!window.PasswordCredential;
 
 /*
   Although this sample app is using Polymer, most of the interactions are
